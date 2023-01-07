@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间的值：com.imooc.interview.mybatis.EmpMapper，虚拟的类；并不强制需要真是存在EmpMapper类以及包，相当于一个虚拟的类 -->
+<!-- 通常会对应上对应的dao接口（interface）类；同时通过namespace和dao中类能将 mapper mapper.xml 关联起来 -->
+<!-- 方法中的ID 和dao(mapper)接口中的方法同名，也能关联起来 -->
+<mapper namespace="com.imooc.interview.mybatis.dao.emp">
+    <!-- 通常设置四个参数，
+    size 缓存中最多容量多少个对象；
+    eviction 缓存多余对象清理策略，比如FIFO，先进先出，LRU 指定时间内被访问次数最少清理；
+    flushInterval 多久清理一次缓存，单位毫秒；
+    readOnly=="true" 必须设置，保存在缓存中的对象是只读，不允许被修改 -->
+    <!-- 二级缓存需要序列化操作，因此所有被二级缓存存储的对象（比如实体）必须要实现 Serializable 接口 -->
+    <cache size="512" eviction="FIFO" flushInterval="60000" readOnly="true"/>
+
+    <!-- useCache 语句是否使用缓存；不适合缓存的，指定不使用缓存 userCache="false" -->
+    <select id="findAll" parameterType="int" resultType="com.imooc.interview.mybatis.Employee" useCache="false">
+        select * from employee
+    </select>
+
+    <!-- useCache=true -->
+    <select id="findById" parameterType="int" resultType="com.imooc.interview.mybatis.Employee" useCache="true">
+        select * from employee where eno = #{value}
+    </select>
+
+    <!-- mybatis 为了保持和缓存中对象同步，写操作（insert，update，delete）调用时候，都会对对应的对象缓存进行清除 -->
+
+
+</mapper>
